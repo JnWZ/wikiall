@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - Étape 1</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class='background-blur'>
+        <!-- ... (contient le header du layout) ... -->
+    </header>
+
+    <div class="login-container">
+        <h1>Connexion - Étape 1</h1>
+        <form action="/verifier_identifiant" method="POST">
+            <label for="identifiant">Identifiant :</label>
+            <input type="text" id="identifiant" name="identifiant" required><br>
+            <button type="submit">Suivant</button>
+        </form>
+        <button type="submit" href="{{url_for('new_user')}}">Pas de compte ? Créez le votre !</button>
+    </div>
+
+    <footer class="background-blur">
+            <!-- ... (contient le footer du layout) ... -->
+    </footer>
+
+</body>
+</html>

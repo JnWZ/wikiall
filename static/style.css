@@ -1,0 +1,250 @@
+/* Réinitialisation des styles par défaut */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+/* Importer la police depuis le dossier static */
+@font-face {
+    font-family: 'Dosis-SemiBold'; /* Remplacez NomDeLaPolice par le nom de votre police */
+    src: url('/static/Dosis-SemiBold.ttf') format('truetype'); /* Spécifiez le chemin vers votre fichier de police */
+}
+/* Body */
+body {
+    font-family: 'Dosis-SemiBold', sans-serif;
+    background-color: #ffffff; /* Blanc */
+    color: #000000; /* Noir */
+}
+
+header {
+    background-color: #000000; /* Noir */
+    color: #ffffff; /* Blanc */
+    padding: 20px;
+    text-align: center;
+    position: fixed; /* Position fixée */
+    top: 0; /* Fixe le header en haut */
+    width: 100%; /* Largeur de 100% */
+}
+
+
+/* Styles pour le lien hypertexte "WikiAll" */
+header h1 a {
+    color: white; /* Couleur du texte */
+    text-decoration: none; /* Supprimer le soulignement */
+}
+
+/* Main */
+main {
+    max-width: 1200px;
+    margin: 0 auto; /* Centrage horizontal */
+    padding: 20px;
+    padding-top: 140px; /* Ajoute un espace en haut de la page pour éviter que le contenu soit caché derrière le header */
+}
+
+
+/* Article */
+.article {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #f2f2f2; /* Gris clair */
+}
+
+/* Footer */
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #000; /* Couleur de fond */
+    color: #fff; /* Couleur du texte */
+    padding: 20px; /* Espacement intérieur */
+    text-align: center;
+}
+
+.header-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
+    padding: 0 20px;
+}
+
+.transparent-bg {
+    background-color: transparent;
+    border : none;
+    cursor: pointer;
+}
+
+#add-section {
+    position:-webkit-sticky;
+    right: 0;
+    padding-right: 85px;
+
+}
+.new-wiki {
+    position : -webkit-sticky;
+    right : 0;
+    padding-right: 80px;
+    background-color: transparent;
+}
+/* Style du logo */
+.logo {
+    position:-webkit-sticky; /* Position fixée */
+    left: 50%; /* Aligné au centre */
+    transform: translateX(-50%); /* Centre horizontalement */
+}
+
+/* Style du texte "WikiAll" */
+.logo h1 {
+    font-family: 'Dosis-SemiBold', sans-serif;
+    font-size: 24px;
+    margin: 0; /* Supprime les marges par défaut du texte */
+}
+
+/* Style de la barre de recherche */
+.search-bar {
+    position: fixed; /* Position fixée */
+    left: 0; /* Alignée à gauche */
+    padding-left: 20px; /* Ajoute un espace à gauche */
+    display: flex;
+    flex-grow: 1;
+}
+
+/* Affichage de la barre de recherche */
+.search-bar.show {
+    display: flex;
+    align-items: center;
+}
+
+/* Style de l'entrée de texte */
+.search-bar input[type="text"] {
+    font-family: 'Dosis-SemiBold', sans-serif;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 300px;
+    margin-right: 10px;
+}
+
+.menu-btn button {
+    border: none;
+    border-radius: 0px;
+    height: max-content;
+    width: 40%;
+}
+
+/* Style du bouton de recherche */
+.search-bar button {
+    background-color: #000;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Style de l'image de la loupe */
+.search-bar img {
+    width: 24px;
+    height: auto;
+}
+
+
+
+input[type="text"], textarea {
+    border: none;
+    font-family: "Dosis-SemiBold", sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+input[type="text"]:focus, textarea:focus {
+    outline: none;
+}
+
+.title-container {
+    display: flex;
+    align-items: center;
+    justify-content: None;
+  }
+
+
+#edit-button {
+    margin-right: 20px; 
+  }
+
+
+hr {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 10px 0;
+}
+
+.section-element table {
+    width: 100%;
+    border-collapse:unset;
+}
+
+.section-element th,
+.section-element td {
+    padding: 10px;
+    border: none;
+    text-align: left;
+}
+
+.section-element th:first-child,
+.section-element td:first-child {
+    border-right: 1px solid black;
+    border-top: none;
+}
+
+
+/* Ajoutez cette nouvelle classe pour le rectangle centré */
+.login-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.8); /* Ajustez l'opacité de l'arrière-plan */
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    z-index: 1;
+  }
+  
+  /* Modifiez la classe existante pour le header */
+header {
+   background-color: rgb(0, 0, 0); /* Ajustez l'opacité de l'arrière-plan */
+  /* ... */
+}
+  
+  /* Ajoutez cette nouvelle classe pour le footer */
+footer {
+  background-color: rgb(0, 0, 0); /* Ajustez l'opacité de l'arrière-plan */
+    /* ... */
+}
+  
+/* Ajoutez cette nouvelle classe pour flouter l'arrière-plan */
+.background-blur {
+    filter: blur(2px); /* Ajustez le flou */
+    -webkit-filter: blur(2px); /* Ajustez le flou pour les navigateurs WebKit */
+    pointer-events: none; /* Désactive les événements de la souris sur les éléments floutés */
+    user-select: none; /* Empêche la sélection du texte */
+}
+
+
+.updating-tools {
+  display: flex;
+  justify-content: right;
+  align-items: right;
+  margin-right: 30px;
+}
+  
+.updating-tools button {
+  margin-left: 30px;
+}
+
+

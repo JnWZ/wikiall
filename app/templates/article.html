@@ -1,0 +1,210 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+    <div class="title-container">
+        <h2 id="title-element">{{ article[1] }}</h2>
+        <div class="updating-tools">
+            <button id="edit-button" type="button" class="transparent-bg"><img src="{{url_for('static', filename='update.png')}}" width="24" height="24"></button>
+            <form action="/add_section" method="post">
+                <input type="hidden" name="article_id" value="{{ article[0] }}">
+                <button id="add-section" type="button" class="transparent-bg"><img src="{{url_for('static', filename='add_section.png')}}" alt="Add a section" width="24" height="24"></button>
+                <div id="section-options" class="hidden menu-btn">
+                    <button value="title">Titre</button>
+                    <button value="text">Texte</button>
+                    <button value="table">Tableau</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <style>
+        .hidden {
+          display: none;
+        }
+        .block {
+            display: block;
+        }
+    </style>    
+
+    <form id="edit-form" style="display: none;">
+        <input type="text" id="title-input" value="{{ article[1] }}" class="title-container">
+
+        {% for section in sections %}
+            {% if section[3] == 'titre' %}
+                <h3 class="section-element" style="margin-bottom: 40px;" data-section-type="titre">
+                    <input type="text" id="section-{{ section[0] }}-input" value="{{ section[4] }}" style="display: none;">
+                </h3>
+                <hr>
+            {% elif section[3] == 'texte' %}
+                <p class="section-element" style="margin-bottom: 20px;" data-section-type="texte">
+                    <textarea id="section-{{ section[0] }}-input" style="display: none;">{{ section[4] }}</textarea>
+                </p>
+                {% elif section[3] == 'tableau' %}
+                <!-- Utilisez une balise de tableau pour encapsuler le contenu du tableau -->
+                <table data-section-type="table" id="section-{{ section[0] }}-input">
+                    <!-- Utilisez une boucle pour traiter chaque ligne du tableau -->
+                    {% for row in section[4].split('\n') %}
+                        <!-- Supprimez les caractères de début et de fin de ligne '|' -->
+                        {% set row_content = row.strip('|') %}
+                        <!-- Créez une ligne de tableau avec une boucle pour chaque cellule -->
+                        <tr>
+                            {% for cell in row_content.split('|') %}
+                                <!-- Supprimez les espaces vides de début et de fin de cellule -->
+                                <td>
+                                    <textarea>{{ cell.strip() }}</textarea>
+
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}            
+        {% endfor %}
+    </form>
+
+
+    <a id="casual" style="display: block;">
+        {% for section in sections %}
+            {% if section[3] == 'titre' %}
+                <h3 class="section-element">{{ section[4] }}</h3>
+                <hr>
+            {% elif section[3] == 'texte' %}
+                <p class="section-element">{{ section[4] }}</p>
+            {% elif section[3] == 'tableau' %}
+                <table class="section-element">
+                    {% for row in section[4].split('\n') %}
+                        {% set row_content = row.strip('|') %}
+                        <tr>
+                            {% for cell in row_content.split('|') %}
+                                <td>{{ cell.strip() }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+            
+        {% endfor %}
+    </a>
+
+
+    <script>
+        const editButton = document.getElementById('edit-button');
+        const editForm = document.getElementById('edit-form');
+        const titleInput = document.getElementById('title-input');
+        const titleElement = document.getElementById('title-element');
+        const sectionInputs = document.querySelectorAll('input[id^="section-"], textarea[id^="section-"], table[id^="section-"]');
+        const sectionElements = document.querySelectorAll('.section-element');
+        const sectionCasual = document.getElementById('casual')
+
+        editButton.addEventListener('click', function() {
+            if (editForm.style.display === 'none') {
+                editForm.style.display = 'block';
+                titleElement.style.display = 'none';
+                titleInput.style.display = 'block';
+                sectionInputs.forEach(function(input) {
+                    input.style.display = 'block';
+                    input.parentNode.style.display = 'block'; // afficher le parent de l'input (h3 ou p)
+                });
+                sectionCasual.style.display = 'none';
+                editButton.textContent = 'Enregistrer';
+            } 
+            else {
+                editForm.style.display = 'none';
+                titleElement.style.display = 'block';
+                titleInput.style.display = 'none';
+                sectionInputs.forEach(function(input) {
+                    input.style.display = 'none';
+                    input.parentNode.style.display = 'none'; // masquer le parent de l'input (h3 ou p)
+                });
+                sectionCasual.style.display = 'block';
+                editButton.textContent = 'Modifier';
+
+                const titleValue = titleInput.value;
+                const sectionValues = [];
+
+                // Parcourir tous les éléments de section
+                sectionInputs.forEach(function(input) {
+                    const sectionType = input.parentNode.getAttribute('data-section-type');
+                    let sectionValue;
+
+                    if (sectionType === 'table') {
+                        const tableData = [];
+                        const tableRows = input.querySelectorAll('tr');
+
+                        tableRows.forEach(function(row) {
+                            const rowData = [];
+                            const cells = row.querySelectorAll('td textarea');  // Sélectionner les éléments textarea qui sont des enfants des éléments td
+
+                            cells.forEach(function(cell) {
+                                rowData.push(cell.value.trim());
+                            });
+
+                            tableData.push(rowData);
+                        });
+
+                        sectionValue = tableData;
+                    } else {
+                        sectionValue = input.value;
+                    }
+
+                    sectionValues.push(sectionValue);
+                });
+
+                    
+
+            // Envoyez les données au serveur via une requête AJAX
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/article/{{article[0]}}/save', true); // Remplacez "id" par l'ID de l'article
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // Réponse reçue du serveur
+                    console.log('Données enregistrées avec succès !');
+                }
+            };
+            xhr.send(JSON.stringify({'title': titleValue, 'sections': sectionValues}));  // Inclure le titre dans les données
+
+
+            }
+        });
+
+        
+        const addSectionButton = document.getElementById('add-section');
+        const sectionOptions = document.getElementById('section-options');
+
+        addSectionButton.addEventListener('click', function(event) {
+            // Empêchez le formulaire d'être soumis normalement
+            event.preventDefault();
+
+            // Affichez ou masquez les options de section
+            sectionOptions.classList.toggle('hidden');
+        });
+
+        // Masquez les options de section lorsque l'utilisateur clique en dehors de celles-ci
+        document.addEventListener('click', function(event) {
+            if (!sectionOptions.contains(event.target)) {
+                sectionOptions.classList.add('hidden');
+            }
+        });
+
+        // Ajoutez un écouteur d'événements à chaque bouton des options de section
+        const sectionOptionButtons = sectionOptions.querySelectorAll('button');
+        sectionOptionButtons.forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                // Ajoutez une nouvelle section à l'article dans la base de données
+                const form = event.target.form;
+                const formData = new FormData(form);
+                formData.set('section_type', event.target.value);
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                }).then(function(response) {
+                    // Redirigez l'utilisateur vers la page de l'article
+                    window.location.href = response.url;
+                });
+            });
+        });
+        
+
+    </script>
+{% endblock %}
